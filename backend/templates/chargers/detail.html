@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{ charger.title }}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <img src="{{ charger.photo_url|default:'/static/placeholder.svg' }}" class="img-fluid">
+  </div>
+  <div class="col-md-6">
+    <h2>{{ charger.title }}</h2>
+    <p>{{ charger.description }}</p>
+    <p><strong>Address:</strong> {{ charger.address }}</p>
+    <p><strong>Type:</strong> {{ charger.get_plug_type_display }}</p>
+    <p><strong>Price:</strong> ${{ charger.price_per_kwh }} / kWh</p>
+    <p><strong>Status:</strong> {{ charger.get_status_display }}</p>
+    <a href="/payments/?charger={{ charger.pk }}" class="btn btn-primary">Book this charger</a>
+  </div>
+</div>
+{% endblock %}
