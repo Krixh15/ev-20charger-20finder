@@ -1,23 +1,16 @@
-{% extends 'base.html' %} {% block title %}My Chargers{% endblock %} {% block
-content %}
+{% extends 'base.html' %}
+{% block title %}My Chargers{% endblock %}
+{% block content %}
 <h2>My Chargers</h2>
-<p>
-  <a class="btn btn-primary" href="/admin/chargers/charger/add/">Add Charger</a>
-</p>
+<p><a class="btn btn-primary" href="/admin/chargers/charger/add/">Add Charger</a></p>
 <div class="row">
   {% for c in chargers %}
   <div class="col-md-6">
     <div class="card mb-3">
       <div class="card-body">
         <h5 class="card-title">{{ c.title }}</h5>
-        <p class="card-text">
-          Status: {{ c.get_status_display }} • Approved: {{ c.is_approved }}
-        </p>
-        <a
-          href="/admin/chargers/charger/{{ c.pk }}/change/"
-          class="btn btn-sm btn-outline-secondary"
-          >Edit</a
-        >
+        <p class="card-text">Status: {{ c.get_status_display }} • Approved: {{ c.is_approved }}</p>
+        <a href="/admin/chargers/charger/{{ c.pk }}/change/" class="btn btn-sm btn-outline-secondary">Edit</a>
       </div>
     </div>
   </div>
