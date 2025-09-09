@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Payments{% endblock %}
+{% block content %}
+<h2>Payments (Razorpay Test)</h2>
+<p>Razorpay test integration will be used. For now this page demonstrates a payment form that will later be wired to server-side checkout.</p>
+<form method="post">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label">Amount (USD)</label>
+    <input class="form-control" name="amount" value="5.00">
+  </div>
+  <button class="btn btn-success">Pay (Test)</button>
+</form>
+{% endblock %}
