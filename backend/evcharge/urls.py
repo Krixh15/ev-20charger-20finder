@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 handler404 = 'evcharge.views.custom_404'
@@ -14,6 +14,7 @@ urlpatterns = [
     path('host/dashboard/', views.host_dashboard, name='host_dashboard'),
     path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('booking/', views.booking_page, name='booking'),
+    path('chargers/', include('chargers.urls')),
     path('payments/', views.payments_page, name='payments'),
     path('reviews/', views.reviews_page, name='reviews'),
     path('contact/', views.contact_page, name='contact'),
