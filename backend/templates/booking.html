@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Booking{% endblock %}
+{% block content %}
+<h2>Find & Book Chargers</h2>
+<p>Search and filter chargers by availability, price, plug type, and rating.</p>
+<!-- Simple search form -->
+<form class="row g-3 mb-4">
+  <div class="col-md-4">
+    <input class="form-control" placeholder="Location">
+  </div>
+  <div class="col-md-2">
+    <select class="form-select">
+      <option>Any type</option>
+      <option>Type2</option>
+      <option>CCS</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select class="form-select">
+      <option>Any</option>
+      <option>Free</option>
+      <option>Booked</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Sample Charger</h5>
+        <p class="card-text">Type2 • $0.30/kWh • Free</p>
+        <a href="/payments/" class="btn btn-primary">Book</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
