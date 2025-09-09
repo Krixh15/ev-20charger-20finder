@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Find Chargers{% endblock %}
+{% block content %}
+<h2>Available Chargers</h2>
+<form class="row g-3 mb-3">
+  <div class="col-md-4">
+    <input class="form-control" name="q" placeholder="Search by title or address" value="{{ request.GET.q }}">
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="plug">
+      <option value="">Any type</option>
+      <option value="type2">Type2</option>
+      <option value="ccs">CCS</option>
+      <option value="chademo">CHAdeMO</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="status">
+      <option value="">Any</option>
+      <option value="free">Free</option>
+      <option value="booked">Booked</option>
+      <option value="occupied">Occupied</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+<div class="row">
+  {% for c in chargers %}
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-4">
+          <img src="{{ c.photo_url|default:'/static/placeholder.svg' }}" class="img-fluid rounded-start">
+        </div>
+        <div class="col-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ c.title }}</h5>
+            <p class="card-text small">{{ c.address }}</p>
+            <p class="card-text">{{ c.get_plug_type_display }} • ${{ c.price_per_kwh }} / kWh • Rating: {{ c.rating }}</p>
+            <p class="card-text"><span class="badge bg-{{ 'success' if c.status=='free' else 'warning' if c.status=='booked' else 'danger' }}">{{ c.get_status_display }}</span></p>
+            <a href="/chargers/{{ c.pk }}/" class="btn btn-sm btn-primary">View</a>
+            <a href="/payments/" class="btn btn-sm btn-outline-primary">Book</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p>No chargers found.</p>
+  {% endfor %}
+</div>
+{% endblock %}
