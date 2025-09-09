@@ -1,36 +1,41 @@
-{% extends 'base.html' %}
-{% block title %}Payment{% endblock %}
-{% block content %}
+{% extends 'base.html' %} {% block title %}Payment{% endblock %} {% block
+content %}
 <h2>Complete Payment</h2>
 <p>Booking #{{ booking.pk }} — Amount: ₹{{ booking.amount }}</p>
 <button id="rzp-button" class="btn btn-success">Pay Now</button>
 
-{# Render csrf token so it's available as a template variable and as a hidden input #}
-<form style="display:none;">{% csrf_token %}</form>
+{# Render csrf token so it's available as a template variable and as a hidden
+input #}
+<form style="display: none">{% csrf_token %}</form>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-  const CSRF_TOKEN = '{{ csrf_token }}';
+  const CSRF_TOKEN = "{{ csrf_token }}";
   const options = {
-    key: '{{ razorpay_key }}',
-    amount: '{{ amount }}',
-    currency: 'INR',
-    name: 'EV Share',
-    description: 'Booking payment',
-    order_id: '{{ order_id }}',
-    handler: function (response){
+    key: "{{ razorpay_key }}",
+    amount: "{{ amount }}",
+    currency: "INR",
+    name: "EV Share",
+    description: "Booking payment",
+    order_id: "{{ order_id }}",
+    handler: function (response) {
       // Send payment confirmation to server
       fetch('{% url "bookings:payment_callback" %}', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': CSRF_TOKEN},
-        body: `booking_id={{ booking.pk }}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}`
-      }).then(r => r.json()).then(data => {
-        if (data.status === 'ok') {
-          window.location.href = '{% url "bookings:thankyou" booking.pk %}';
-        } else alert('Payment verification failed');
-      });
-    }
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": CSRF_TOKEN,
+        },
+        body: `booking_id={{ booking.pk }}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}`,
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            window.location.href = '{% url "bookings:thankyou" booking.pk %}';
+          } else alert("Payment verification failed");
+        });
+    },
   };
-  document.getElementById('rzp-button').addEventListener('click', function(e){
+  document.getElementById("rzp-button").addEventListener("click", function (e) {
     const rzp = new Razorpay(options);
     rzp.open();
     e.preventDefault();
