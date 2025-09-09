@@ -38,11 +38,13 @@ Seeding sample data:
 This initial skeleton does not yet include seed scripts. Later steps will add a management command to populate sample chargers and users.
 
 Debugging notes:
+
 - If you see "ModuleNotFoundError: dotenv", ensure you installed requirements and activated the virtual environment.
 - If templates return 500, check the console logs where runserver is running.
 - To run Django checks: python manage.py check
 
 Next steps (I'll implement these in the following tasks):
+
 - Create accounts app with custom user and role management
 - Create chargers and bookings apps with models, views, and Razorpay integration
 - Add templates, static assets, media uploads, and admin customizations

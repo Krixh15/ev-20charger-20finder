@@ -26,6 +26,7 @@ Quick start (Linux):
 5. Copy environment file and set keys
 
    cp ../.env.example .env
+
    # Edit .env and set SECRET_KEY, RAZORPAY keys, GOOGLE_MAPS_API_KEY
 
 6. Create database migrations and migrate
@@ -48,12 +49,14 @@ Quick start (Linux):
 Open http://127.0.0.1:8000 in your browser.
 
 Notes:
+
 - Admin interface: http://127.0.0.1:8000/admin/ (use superuser credentials).
 - Razorpay: This project uses Razorpay test keys. Replace RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env with your test keys.
 - Google Maps: Replace GOOGLE_MAPS_API_KEY in .env to enable map features (currently placeholder).
 - Charger status cycling: Use the management command `python manage.py cycle_chargers` to update charger statuses. Set up a cron job to run it every 5 minutes in production.
 
 Common debugging tips:
+
 - "ModuleNotFoundError": Ensure virtualenv activated and requirements installed.
 - "OperationalError: no such table": Did you run migrations? Run `python manage.py migrate`.
 - Templates not loading: Ensure TEMPLATES DIRS includes backend/templates and files exist.
