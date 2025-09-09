@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Reviews{% endblock %}
+{% block content %}
+<h2>Community Reviews</h2>
+<p>Users can leave a review and rating after a booking.</p>
+<form method="post">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label">Rating</label>
+    <select class="form-select" name="rating">
+      <option>5</option>
+      <option>4</option>
+      <option>3</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Review</label>
+    <textarea class="form-control" name="review"></textarea>
+  </div>
+  <button class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
