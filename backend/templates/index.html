@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row align-items-center">
+  <div class="col-lg-6">
+    <h1 class="display-5">Share and Book EV Chargers Nearby</h1>
+    <p class="lead">Find community chargers, book by the hour, earn as a host. Simple, secure, and community-driven.</p>
+    <a href="/booking/" class="btn btn-primary btn-lg">Find Chargers</a>
+    <a href="/signup/" class="btn btn-outline-secondary btn-lg ms-2">Become a Host</a>
+  </div>
+  <div class="col-lg-6">
+    <img src="/static/placeholder.svg" alt="EV" class="img-fluid">
+  </div>
+</div>
+
+<hr class="my-5">
+
+<h2>Featured Chargers</h2>
+<div class="row">
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Home Charger - Downtown</h5>
+        <p class="card-text">Type: Type2 • Price: $0.30 / kWh • Rating: 4.8</p>
+        <a href="/booking/" class="btn btn-sm btn-primary">Book</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Workplace Charger - Mall</h5>
+        <p class="card-text">Type: CCS • Price: $0.25 / kWh • Rating: 4.5</p>
+        <a href="/booking/" class="btn btn-sm btn-primary">Book</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Host Garage - Uptown</h5>
+        <p class="card-text">Type: Type2 • Price: $0.20 / kWh • Rating: 4.9</p>
+        <a href="/booking/" class="btn btn-sm btn-primary">Book</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
