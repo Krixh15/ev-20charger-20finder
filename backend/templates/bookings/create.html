@@ -1,5 +1,6 @@
-{% extends 'base.html' %} {% block title %}Create Booking{% endblock %} {% block
-content %}
+{% extends 'base.html' %}
+{% block title %}Create Booking{% endblock %}
+{% block content %}
 <h2>Create a Booking</h2>
 <form method="post">
   {% csrf_token %}
@@ -7,25 +8,23 @@ content %}
     <label class="form-label">Charger</label>
     <select class="form-select" name="charger" required>
       {% for c in chargers %}
-      <option value="{{ c.pk }}">
-        {{ c.title }} — {{ c.address }} — ${{ c.price_per_kwh }}/kWh
-      </option>
+      <option value="{{ c.pk }}">{{ c.title }} — {{ c.address }} — ${{ c.price_per_kwh }}/kWh</option>
       {% endfor %}
     </select>
   </div>
   <div class="row">
     <div class="col-md-6 mb-3">
       <label class="form-label">Start (YYYY-MM-DD HH:MM)</label>
-      <input class="form-control" name="start" required />
+      <input class="form-control" name="start" required>
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">End (YYYY-MM-DD HH:MM)</label>
-      <input class="form-control" name="end" required />
+      <input class="form-control" name="end" required>
     </div>
   </div>
   <div class="mb-3">
     <label class="form-label">Amount (INR)</label>
-    <input class="form-control" name="amount" value="100.00" required />
+    <input class="form-control" name="amount" value="100.00" required>
   </div>
   <button class="btn btn-primary">Proceed to Payment</button>
 </form>
