@@ -1,5 +1,9 @@
-{% extends 'base.html' %} {% block title %}Thank you{% endblock %} {% block
-content %}
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
 <h2>Payment received</h2>
 <p>Thank you! Your booking #{{ booking.pk }} is confirmed.</p>
 <a class="btn btn-primary" href="/driver/dashboard/">Go to Dashboard</a>

@@ -1,5 +1,9 @@
-{% extends 'base.html' %} {% block title %}Payment{% endblock %} {% block
-content %}
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
 <h2>Complete Payment</h2>
 <p>Booking #{{ booking.pk }} — Amount: ₹{{ booking.amount }}</p>
 <button id="rzp-button" class="btn btn-success">Pay Now</button>
