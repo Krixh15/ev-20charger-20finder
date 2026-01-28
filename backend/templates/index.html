@@ -12,12 +12,12 @@
       and community-driven.
     </p>
     <a href="/booking/" class="btn btn-primary btn-lg">Find Chargers</a>
-    <a href="/signup/" class="btn btn-outline-secondary btn-lg ms-2"
-      >Become a Host</a
-    >
+    <a href="/signup/" class="btn btn-outline-secondary btn-lg ms-2">
+      Become a Host
+    </a>
   </div>
   <div class="col-lg-6">
-    <img src="/static/placeholder.svg" alt="EV" class="img-fluid" />
+    <img src="/Users/krixh.../Downloads/ev-20charger-20finder/backend/templates/charge share homepage.png" alt="EV" />
   </div>
 </div>
 
@@ -29,28 +29,98 @@
     <div class="card mb-4">
       <div class="card-body">
         <h5 class="card-title">Home Charger - Downtown</h5>
-        <p class="card-text">Type: Type2 • Price: $0.30 / kWh • Rating: 4.8</p>
+        <p class="card-text">Type: Type2 • Price: ₹12 / kWh • Rating: 4.8</p>
         <a href="/booking/" class="btn btn-sm btn-primary">Book</a>
       </div>
     </div>
   </div>
+
   <div class="col-md-4">
     <div class="card mb-4">
       <div class="card-body">
         <h5 class="card-title">Workplace Charger - Mall</h5>
-        <p class="card-text">Type: CCS • Price: $0.25 / kWh • Rating: 4.5</p>
+        <p class="card-text">Type: CCS • Price: ₹10 / kWh • Rating: 4.5</p>
         <a href="/booking/" class="btn btn-sm btn-primary">Book</a>
       </div>
     </div>
   </div>
+
   <div class="col-md-4">
     <div class="card mb-4">
       <div class="card-body">
         <h5 class="card-title">Host Garage - Uptown</h5>
-        <p class="card-text">Type: Type2 • Price: $0.20 / kWh • Rating: 4.9</p>
+        <p class="card-text">Type: Type2 • Price: ₹9 / kWh • Rating: 4.9</p>
         <a href="/booking/" class="btn btn-sm btn-primary">Book</a>
       </div>
     </div>
   </div>
 </div>
+
+<hr class="my-5" />
+
+<!-- ================= MAP SECTION ================= -->
+
+<h2 class="mb-3">Nearby EV Chargers</h2>
+
+<div id="map" style="height: 450px; width: 100%; border-radius: 8px;"></div>
+
+<script>
+  // Temporary static charger data (later from database)
+  const chargers = [
+    { name: "Home Charger - Downtown", lat: 23.3441, lng: 85.3096 },
+    { name: "Workplace Charger - Mall", lat: 23.3427, lng: 85.3072 },
+    { name: "Host Garage - Uptown", lat: 23.3464, lng: 85.3129 }
+  ];
+
+  function initMap() {
+    const defaultLocation = { lat: 23.3441, lng: 85.3096 };
+
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 14,
+      center: defaultLocation
+    });
+
+    // Show user location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const userPos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        map.setCenter(userPos);
+
+        new google.maps.Marker({
+          position: userPos,
+          map: map,
+          title: "Your Location",
+          icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        });
+      });
+    }
+
+    // Charger markers
+    chargers.forEach(charger => {
+      const marker = new google.maps.Marker({
+        position: { lat: charger.lat, lng: charger.lng },
+        map: map,
+        title: charger.name
+      });
+
+      const info = new google.maps.InfoWindow({
+        content: `<strong>${charger.name}</strong>`
+      });
+
+      marker.addListener("click", () => info.open(map, marker));
+    });
+  }
+</script>
+
+<!-- 🔑 ADD YOUR GOOGLE MAPS API KEY HERE -->
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvR1tNxqinBpmvYxiodqaA-lM8CVrF4Dc&callback=initMap"
+  async
+  defer>
+</script>
+
 {% endblock %}
