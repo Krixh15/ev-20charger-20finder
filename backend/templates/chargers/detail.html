@@ -16,7 +16,7 @@
     <p>{{ charger.description }}</p>
     <p><strong>Address:</strong> {{ charger.address }}</p>
     <p><strong>Type:</strong> {{ charger.get_plug_type_display }}</p>
-    <p><strong>Price:</strong> ${{ charger.price_per_kwh }} / kWh</p>
+    <p><strong>Price:</strong> ₹{{ charger.price_per_kwh }} / kWh</p>
     <p><strong>Status:</strong> {{ charger.get_status_display }}</p>
     <a href="/payments/?charger={{ charger.pk }}" class="btn btn-primary"
       >Book this charger</a

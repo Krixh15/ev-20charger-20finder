@@ -95,7 +95,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # Razorpay and Google Maps placeholders from env
 RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', '')
 RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', '')
-GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
+GOOGLE_MAPS_API_KEY = os.getenv('AIzaSyAvR1tNxqinBpmvYxiodqaA-lM8CVrF4Dc', '')
 
 # Simple email backend for development (console)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
