@@ -3,11 +3,81 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="row align-items-center mb-4">
+  <div class="col-md-8">
+    <h2 class="mb-1">Driver Dashboard</h2>
+    <p class="text-muted mb-0">
+      Welcome back, {{ user.first_name|default:user.username }}. Find chargers,
+      manage bookings, and track your charging activity.
+    </p>
+  </div>
+  <div class="col-md-4 text-md-end mt-3 mt-md-0">
+    <a class="btn btn-primary" href="/booking/">Search Chargers</a>
+  </div>
+</div>
 
-<h2>Driver Dashboard</h2>
-<p>
-  Welcome, driver. This dashboard will show your upcoming bookings, past
-  bookings, and quick search to find chargers.
-</p>
-<a class="btn btn-primary" href="/booking/">Search Chargers</a>
+<div class="row g-4">
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Upcoming Sessions</h5>
+        <p class="card-text text-muted">
+          Keep track of your next charging stops and reservation times.
+        </p>
+        <a class="btn btn-outline-primary" href="/bookings/">View bookings</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Favorites</h5>
+        <p class="card-text text-muted">
+          Save the chargers you visit most to quickly access them later.
+        </p>
+        <button class="btn btn-outline-secondary" disabled>
+          Coming soon
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Payments</h5>
+        <p class="card-text text-muted">
+          Review recent payments and download receipts for your trips.
+        </p>
+        <a class="btn btn-outline-primary" href="/payments/">Payment center</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Quick Actions</h5>
+        <ul class="list-unstyled text-muted mb-3">
+          <li>• Find chargers near you</li>
+          <li>• Review past trips</li>
+          <li>• Share feedback</li>
+        </ul>
+        <a class="btn btn-outline-dark" href="/reviews/">Leave a review</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-8">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Charging Insights</h5>
+        <p class="card-text text-muted">
+          Track energy usage, time spent charging, and your most visited
+          stations. Analytics will appear here as data is collected.
+        </p>
+        <div class="bg-light rounded p-3 text-muted">
+          No insights yet. Complete a booking to start tracking.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
