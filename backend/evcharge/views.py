@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from accounts.models import User
 
 # Home view
@@ -10,7 +11,7 @@ def home(request):
 # Login view: handles GET (show form) and POST (authenticate)
 def login_view(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = (request.POST.get('email') or '').strip().lower()
         password = request.POST.get('password')
         # Using email as username
         user = authenticate(request, username=email, password=password)
@@ -29,11 +30,11 @@ def login_view(request):
 def signup_view(request):
     if request.method == 'POST':
         name = request.POST.get('name')
-        email = request.POST.get('email')
+        email = (request.POST.get('email') or '').strip().lower()
         password = request.POST.get('password')
         role = request.POST.get('role', User.ROLE_DRIVER)
-        # Username must be unique; we'll use the email as username
-        if User.objects.filter(username=email).exists():
+        # Username and email must be unique; we'll use the email as username
+        if User.objects.filter(email=email).exists() or User.objects.filter(username=email).exists():
             messages.error(request, 'A user with that email already exists')
             return render(request, 'signup.html')
         user = User.objects.create_user(username=email, email=email, password=password)
@@ -58,12 +59,15 @@ def signup_view(request):
     return render(request, 'signup.html')
 
 # Simple dashboards and pages
+@login_required
 def driver_dashboard(request):
     return render(request, 'driver_dashboard.html')
 
+@login_required
 def host_dashboard(request):
     return render(request, 'host_dashboard.html')
 
+@login_required
 def admin_dashboard(request):
     return render(request, 'admin_dashboard.html')
 

@@ -12,6 +12,7 @@ class User(AbstractUser):
         (ROLE_ADMIN, 'Admin'),
     ]
 
+    email = models.EmailField(unique=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=ROLE_DRIVER)
     # Admins can approve or deactivate accounts
     is_approved = models.BooleanField(default=True)
