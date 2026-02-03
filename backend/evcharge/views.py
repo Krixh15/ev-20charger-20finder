@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from accounts.models import User
 
 # Home view
@@ -37,6 +39,13 @@ def signup_view(request):
         if User.objects.filter(email=email).exists() or User.objects.filter(username=email).exists():
             messages.error(request, 'A user with that email already exists')
             return render(request, 'signup.html')
+        try:
+            validate_password(password)
+        except ValidationError as error:
+            for message in error.messages:
+                messages.error(request, message)
+            return render(request, 'signup.html')
+
         user = User.objects.create_user(username=email, email=email, password=password)
         user.first_name = name
         user.role = role
@@ -95,3 +104,7 @@ def custom_404(request, exception=None):
 
 def custom_500(request):
     return render(request, '500.html', status=500)
+
+def csrf_failure(request, reason=""):
+    messages.error(request, "Your session expired. Please try again.")
+    return render(request, "login.html", status=403)

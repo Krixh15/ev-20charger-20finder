@@ -82,6 +82,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CSRF_FAILURE_VIEW = "evcharge.views.csrf_failure"
+LOGIN_URL = "/login/"
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True

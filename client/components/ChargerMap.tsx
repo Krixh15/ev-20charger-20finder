@@ -45,7 +45,9 @@ export default function ChargerMap() {
       <div className="absolute left-4 top-4 z-[400] rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-slate-700 shadow">
         {isLoading && "Loading chargers..."}
         {!isLoading && errorMessage && errorMessage}
-        {!isLoading && !errorMessage && `Showing ${chargers.length} chargers`}
+        {!isLoading &&
+          !errorMessage &&
+          `Showing ${chargers.length} chargers`}
       </div>
       <MapContainer
         center={[20.5937, 78.9629]}
@@ -57,7 +59,13 @@ export default function ChargerMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {chargers.map((charger) => (
+        {chargers
+          .filter((charger) =>
+            Number.isFinite(charger.AddressInfo.Latitude) &&
+            Number.isFinite(charger.AddressInfo.Longitude) &&
+            Boolean(charger.AddressInfo.Title)
+          )
+          .map((charger) => (
           <Marker
             key={charger.ID}
             position={[
