@@ -9,7 +9,10 @@ from django.utils import timezone
 from datetime import datetime
 from django.http import JsonResponse
 
-client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+def get_razorpay_client():
+    if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
+        return None
+    return razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 @login_required
 def create_booking(request):
@@ -38,9 +41,22 @@ def create_booking(request):
 @login_required
 def payment_page(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id, driver=request.user)
+    razorpay_client = get_razorpay_client()
+    if not razorpay_client:
+        if request.method == 'POST':
+            booking.status = Booking.STATUS_PAID
+            booking.save()
+            charger = booking.charger
+            charger.set_status(Charger.STATUS_OCCUPIED)
+            return redirect('bookings:thankyou', booking.pk)
+        return render(request, 'bookings/payment.html', {
+            'booking': booking,
+            'dummy_payment': True,
+        })
+
     # Create razorpay order
     amount_paise = int(float(booking.amount) * 100)
-    razorpay_order = client.order.create(dict(amount=amount_paise, currency='INR', payment_capture='1'))
+    razorpay_order = razorpay_client.order.create(dict(amount=amount_paise, currency='INR', payment_capture='1'))
     booking.razorpay_order_id = razorpay_order['id']
     booking.save()
     context = {
@@ -48,6 +64,7 @@ def payment_page(request, booking_id):
         'razorpay_key': settings.RAZORPAY_KEY_ID,
         'order_id': razorpay_order['id'],
         'amount': amount_paise,
+        'dummy_payment': False,
     }
     return render(request, 'bookings/payment.html', context)
 

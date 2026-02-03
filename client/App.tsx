@@ -1,13 +1,15 @@
-import MapView from "./components/MapView";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>EV ChargeShare</h1>
-      <p>Map is loading below 👇</p>
-
-      <MapView />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
