@@ -1,17 +1,20 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from .keys import (
+    ALLOWED_HOSTS,
+    DEBUG,
+    GOOGLE_MAPS_API_KEY,
+    RAZORPAY_KEY_ID,
+    RAZORPAY_KEY_SECRET,
+    SECRET_KEY,
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '..' / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key')
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
-
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -93,9 +96,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 AUTH_USER_MODEL = 'accounts.User'
 
 # Razorpay and Google Maps placeholders from env
-RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', '')
-RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', '')
-GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY', '')
 
 # Simple email backend for development (console)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
