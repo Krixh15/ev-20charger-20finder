@@ -24,7 +24,10 @@
         <p class="card-text text-muted">
           Review availability and keep your chargers ready for drivers.
         </p>
-        <a class="btn btn-outline-primary" href="/chargers/">Manage chargers</a>
+        <div class="d-flex align-items-center justify-content-between">
+          <span class="fw-semibold">{{ host_chargers_count }}</span>
+          <a class="btn btn-outline-primary" href="/chargers/">Manage chargers</a>
+        </div>
       </div>
     </div>
   </div>
@@ -73,6 +76,39 @@
           <li>• Encourage reviews from drivers</li>
         </ul>
         <a class="btn btn-outline-dark" href="/reviews/">View reviews</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Recent Booking Activity</h5>
+        {% if host_bookings %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Driver</th>
+                  <th>Charger</th>
+                  <th>Start</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for booking in host_bookings %}
+                  <tr>
+                    <td>{{ booking.driver.username }}</td>
+                    <td>{{ booking.charger.title }}</td>
+                    <td>{{ booking.start }}</td>
+                    <td><span class="badge bg-light text-dark">{{ booking.status }}</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No booking activity yet.</p>
+        {% endif %}
       </div>
     </div>
   </div>

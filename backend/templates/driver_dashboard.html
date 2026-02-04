@@ -79,5 +79,38 @@
       </div>
     </div>
   </div>
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Upcoming Bookings</h5>
+        {% if upcoming_bookings %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Charger</th>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for booking in upcoming_bookings %}
+                  <tr>
+                    <td>{{ booking.charger.title }}</td>
+                    <td>{{ booking.start }}</td>
+                    <td>{{ booking.end }}</td>
+                    <td><span class="badge bg-light text-dark">{{ booking.status }}</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No upcoming bookings yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

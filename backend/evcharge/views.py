@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from accounts.models import User
+from bookings.models import Booking
+from chargers.models import Charger
+from django.utils import timezone
 
 # Home view
 def home(request):
@@ -70,11 +73,35 @@ def signup_view(request):
 # Simple dashboards and pages
 @login_required
 def driver_dashboard(request):
-    return render(request, 'driver_dashboard.html')
+    upcoming_bookings = (
+        Booking.objects.filter(driver=request.user, start__gte=timezone.now())
+        .select_related("charger")
+        .order_by("start")[:3]
+    )
+    return render(
+        request,
+        'driver_dashboard.html',
+        {
+            "upcoming_bookings": upcoming_bookings,
+        },
+    )
 
 @login_required
 def host_dashboard(request):
-    return render(request, 'host_dashboard.html')
+    host_chargers = Charger.objects.filter(host=request.user)
+    host_bookings = (
+        Booking.objects.filter(charger__host=request.user)
+        .select_related("charger", "driver")
+        .order_by("-start")[:5]
+    )
+    return render(
+        request,
+        'host_dashboard.html',
+        {
+            "host_chargers_count": host_chargers.count(),
+            "host_bookings": host_bookings,
+        },
+    )
 
 @login_required
 def admin_dashboard(request):
