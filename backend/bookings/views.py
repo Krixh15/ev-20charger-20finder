@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Booking
+from accounts.models import User
 from chargers.models import Charger
 from django.utils import timezone
 from datetime import datetime
@@ -13,6 +14,24 @@ def get_razorpay_client():
     if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
         return None
     return razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+@login_required
+def list_bookings(request):
+    if request.user.role == User.ROLE_HOST:
+        bookings = Booking.objects.filter(charger__host=request.user)
+        heading = "Host Bookings"
+    else:
+        bookings = Booking.objects.filter(driver=request.user)
+        heading = "Your Bookings"
+
+    return render(
+        request,
+        "bookings/list.html",
+        {
+            "bookings": bookings.select_related("charger", "driver"),
+            "heading": heading,
+        },
+    )
 
 @login_required
 def create_booking(request):
