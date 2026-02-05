@@ -43,6 +43,17 @@ Debugging notes:
 - If templates return 500, check the console logs where runserver is running.
 - To run Django checks: python manage.py check
 
+Email verification options:
+
+- Add a verification flow using Django's email backend with signed tokens
+  (for example, `django.core.signing` or `PasswordResetTokenGenerator`) and
+  a confirmation view that marks `User.is_approved` or a new
+  `email_verified` flag after confirmation.
+- For a full-featured solution, use `django-allauth` which includes email
+  confirmation, token handling, and templates.
+- If email is not available, a fallback is a one-time code delivered via SMS
+  or messaging apps, still tied to a signed token and an expiration window.
+
 Next steps (I'll implement these in the following tasks):
 
 - Create accounts app with custom user and role management

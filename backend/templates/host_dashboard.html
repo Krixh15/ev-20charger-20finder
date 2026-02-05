@@ -3,11 +3,114 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="row align-items-center mb-4">
+  <div class="col-md-8">
+    <h2 class="mb-1">Host Dashboard</h2>
+    <p class="text-muted mb-0">
+      Welcome back, {{ user.first_name|default:user.username }}. Manage chargers,
+      availability, and revenue from your stations.
+    </p>
+  </div>
+  <div class="col-md-4 text-md-end mt-3 mt-md-0">
+    <a class="btn btn-primary" href="/admin/">Host Admin</a>
+  </div>
+</div>
 
-<h2>Host Dashboard</h2>
-<p>
-  Welcome, host. Add a charger, manage availability, view earnings, and accept
-  bookings here.
-</p>
-<a class="btn btn-primary" href="/admin/">Host Admin</a>
+<div class="row g-4">
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Active Chargers</h5>
+        <p class="card-text text-muted">
+          Review availability and keep your chargers ready for drivers.
+        </p>
+        <div class="d-flex align-items-center justify-content-between">
+          <span class="fw-semibold">{{ host_chargers_count }}</span>
+          <a class="btn btn-outline-primary" href="/chargers/">Manage chargers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Pending Requests</h5>
+        <p class="card-text text-muted">
+          Approve or reschedule upcoming bookings from drivers.
+        </p>
+        <a class="btn btn-outline-primary" href="/bookings/">View bookings</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Revenue Overview</h5>
+        <p class="card-text text-muted">
+          Track earnings from your charging stations and upcoming payouts.
+        </p>
+        <a class="btn btn-outline-primary" href="/payments/">Earnings</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-6">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Availability Planner</h5>
+        <p class="card-text text-muted">
+          Block off maintenance windows and update charger schedules.
+        </p>
+        <button class="btn btn-outline-secondary" disabled>
+          Coming soon
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-6">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Host Tips</h5>
+        <ul class="list-unstyled text-muted mb-3">
+          <li>• Keep chargers updated daily</li>
+          <li>• Respond quickly to booking requests</li>
+          <li>• Encourage reviews from drivers</li>
+        </ul>
+        <a class="btn btn-outline-dark" href="/reviews/">View reviews</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Recent Booking Activity</h5>
+        {% if host_bookings %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Driver</th>
+                  <th>Charger</th>
+                  <th>Start</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for booking in host_bookings %}
+                  <tr>
+                    <td>{{ booking.driver.username }}</td>
+                    <td>{{ booking.charger.title }}</td>
+                    <td>{{ booking.start }}</td>
+                    <td><span class="badge bg-light text-dark">{{ booking.status }}</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No booking activity yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

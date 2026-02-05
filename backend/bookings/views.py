@@ -2,30 +2,101 @@ import razorpay
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from .models import Booking
+from accounts.models import User
 from chargers.models import Charger
 from django.utils import timezone
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 from django.http import JsonResponse
 
-client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+def get_razorpay_client():
+    if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
+        return None
+    return razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+@login_required
+def list_bookings(request):
+    if request.user.role == User.ROLE_HOST:
+        bookings = Booking.objects.filter(charger__host=request.user)
+        heading = "Host Bookings"
+    else:
+        bookings = Booking.objects.filter(driver=request.user)
+        heading = "Your Bookings"
+
+    return render(
+        request,
+        "bookings/list.html",
+        {
+            "bookings": bookings.select_related("charger", "driver"),
+            "heading": heading,
+        },
+    )
 
 @login_required
 def create_booking(request):
     # Simple booking creation from POST data
     if request.method == 'POST':
         charger_id = request.POST.get('charger')
-        start = request.POST.get('start')
-        end = request.POST.get('end')
+        start_input = request.POST.get('start')
+        end_input = request.POST.get('end')
         amount = request.POST.get('amount')
         charger = get_object_or_404(Charger, pk=charger_id)
+        try:
+            start = datetime.strptime(start_input, "%Y-%m-%d %H:%M")
+            end = datetime.strptime(end_input, "%Y-%m-%d %H:%M")
+        except (TypeError, ValueError):
+            messages.error(request, "Please enter valid start and end times.")
+            chargers = Charger.objects.filter(is_approved=True)
+            return render(request, 'bookings/create.html', {'chargers': chargers})
+
+        if timezone.is_naive(start):
+            start = timezone.make_aware(start)
+        if timezone.is_naive(end):
+            end = timezone.make_aware(end)
+
+        if end <= start:
+            messages.error(request, "End time must be after the start time.")
+            chargers = Charger.objects.filter(is_approved=True)
+            return render(request, 'bookings/create.html', {'chargers': chargers})
+
+        if start < timezone.now():
+            messages.error(request, "Start time must be in the future.")
+            chargers = Charger.objects.filter(is_approved=True)
+            return render(request, 'bookings/create.html', {'chargers': chargers})
+
+        try:
+            amount_decimal = Decimal(amount)
+        except (InvalidOperation, TypeError):
+            amount_decimal = None
+
+        if amount_decimal is None or amount_decimal <= 0:
+            messages.error(request, "Please enter a valid booking amount.")
+            chargers = Charger.objects.filter(is_approved=True)
+            return render(request, 'bookings/create.html', {'chargers': chargers})
+
+        overlapping = Booking.objects.filter(
+            charger=charger,
+            status__in=[Booking.STATUS_CREATED, Booking.STATUS_PAID],
+            start__lt=end,
+            end__gt=start,
+        ).exists()
+        if overlapping:
+            messages.error(
+                request,
+                "This charger is already booked for the selected time window.",
+            )
+            chargers = Charger.objects.filter(is_approved=True)
+            return render(request, 'bookings/create.html', {'chargers': chargers})
+
         booking = Booking.objects.create(
             driver=request.user,
             charger=charger,
             start=start,
             end=end,
-            amount=amount,
+            amount=amount_decimal,
             status=Booking.STATUS_CREATED,
         )
         # Mark charger as booked
@@ -38,9 +109,22 @@ def create_booking(request):
 @login_required
 def payment_page(request, booking_id):
     booking = get_object_or_404(Booking, pk=booking_id, driver=request.user)
+    razorpay_client = get_razorpay_client()
+    if not razorpay_client:
+        if request.method == 'POST':
+            booking.status = Booking.STATUS_PAID
+            booking.save()
+            charger = booking.charger
+            charger.set_status(Charger.STATUS_OCCUPIED)
+            return redirect('bookings:thankyou', booking.pk)
+        return render(request, 'bookings/payment.html', {
+            'booking': booking,
+            'dummy_payment': True,
+        })
+
     # Create razorpay order
     amount_paise = int(float(booking.amount) * 100)
-    razorpay_order = client.order.create(dict(amount=amount_paise, currency='INR', payment_capture='1'))
+    razorpay_order = razorpay_client.order.create(dict(amount=amount_paise, currency='INR', payment_capture='1'))
     booking.razorpay_order_id = razorpay_order['id']
     booking.save()
     context = {
@@ -48,6 +132,7 @@ def payment_page(request, booking_id):
         'razorpay_key': settings.RAZORPAY_KEY_ID,
         'order_id': razorpay_order['id'],
         'amount': amount_paise,
+        'dummy_payment': False,
     }
     return render(request, 'bookings/payment.html', context)
 
