@@ -41,18 +41,36 @@
             <li class="nav-item">
               <a class="nav-link" href="/privacy/">Privacy</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/login/">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-primary ms-2" href="/signup/">Sign up</a>
-            </li>
+            {% if user.is_authenticated %}
+              <li class="nav-item">
+                <span class="nav-link">Hi, {{ user.first_name|default:user.username }}</span>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout/">Logout</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="/login/">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="btn btn-primary ms-2" href="/signup/">Sign up</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       </div>
     </nav>
 
-    <main class="container my-5">{% block content %}{% endblock %}</main>
+    <main class="container my-5">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} mb-4" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
 
     <footer class="bg-light py-4 mt-auto">
       <div class="container text-center">

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Bookings{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">{{ heading }}</h2>
+    <p class="text-muted mb-0">
+      Review upcoming and past bookings in one place.
+    </p>
+  </div>
+  <a class="btn btn-primary" href="{% url 'bookings:create' %}">Create booking</a>
+</div>
+
+{% if bookings %}
+  <div class="row g-4">
+    {% for booking in bookings %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title mb-1">{{ booking.charger.title }}</h5>
+            <p class="text-muted small mb-2">
+              {{ booking.start }} → {{ booking.end }}
+            </p>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-light text-dark text-uppercase">{{ booking.status }}</span>
+              <span class="fw-semibold">₹{{ booking.amount }}</span>
+            </div>
+            <div class="d-flex gap-2">
+              <a class="btn btn-outline-primary btn-sm" href="{% url 'bookings:payment' booking.id %}">
+                View payment
+              </a>
+              <a class="btn btn-outline-secondary btn-sm" href="{% url 'bookings:thankyou' booking.id %}">
+                Details
+              </a>
+            </div>
+          </div>
+          <div class="card-footer bg-white border-0 text-muted small">
+            Driver: {{ booking.driver.username }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">
+    No bookings yet. Create your first booking to get started.
+  </div>
+{% endif %}
+{% endblock %}

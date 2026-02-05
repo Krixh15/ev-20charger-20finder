@@ -10,3 +10,15 @@
 export interface DemoResponse {
   message: string;
 }
+
+export interface ChargerLocation {
+  ID: number;
+  AddressInfo: {
+    Latitude: number;
+    Longitude: number;
+    Title: string;
+    Town?: string;
+  };
+}
+
+export type ChargersResponse = ChargerLocation[];
