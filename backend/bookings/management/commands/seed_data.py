@@ -1,35 +1,57 @@
 from django.core.management.base import BaseCommand
 from accounts.models import User
 from chargers.models import Charger
-from django.utils import timezone
-
 class Command(BaseCommand):
     help = 'Seed sample users and chargers for development'
 
     def handle(self, *args, **options):
-        # Create users
-        if not User.objects.filter(username='driver@example.com').exists():
-            driver = User.objects.create_user(username='driver@example.com', email='driver@example.com', password='password')
-            driver.first_name = 'Driver'
-            driver.role = User.ROLE_DRIVER
-            driver.save()
-            self.stdout.write('Created driver user')
-        if not User.objects.filter(username='host@example.com').exists():
-            host = User.objects.create_user(username='host@example.com', email='host@example.com', password='password')
-            host.first_name = 'Host'
-            host.role = User.ROLE_HOST
-            host.is_approved = True
-            host.save()
-            self.stdout.write('Created host user')
-        if not User.objects.filter(username='admin@example.com').exists():
-            admin = User.objects.create_user(username='admin@example.com', email='admin@example.com', password='password')
-            admin.first_name = 'Admin'
-            admin.role = User.ROLE_ADMIN
-            admin.is_staff = True
-            admin.is_superuser = True
-            admin.is_approved = True
-            admin.save()
-            self.stdout.write('Created admin user')
+        # Create or refresh users so credentials stay predictable in development
+        driver, driver_created = User.objects.get_or_create(
+            username='driver@example.com',
+            defaults={'email': 'driver@example.com'},
+        )
+        driver.first_name = 'Driver'
+        driver.role = User.ROLE_DRIVER
+        driver.is_approved = True
+        driver.is_active = True
+        driver.set_password('StrongPass123!')
+        driver.save()
+        self.stdout.write(
+            ('Created' if driver_created else 'Updated')
+            + ' driver user (email: driver@example.com, password: StrongPass123!)'
+        )
+
+        host, host_created = User.objects.get_or_create(
+            username='host@example.com',
+            defaults={'email': 'host@example.com'},
+        )
+        host.first_name = 'Host'
+        host.role = User.ROLE_HOST
+        host.is_approved = True
+        host.is_active = True
+        host.set_password('StrongPass123!')
+        host.save()
+        self.stdout.write(
+            ('Created' if host_created else 'Updated')
+            + ' host user (email: host@example.com, password: StrongPass123!)'
+        )
+
+        admin, admin_created = User.objects.get_or_create(
+            username='admin@example.com',
+            defaults={'email': 'admin@example.com'},
+        )
+        admin.first_name = 'Admin'
+        admin.role = User.ROLE_ADMIN
+        admin.is_staff = True
+        admin.is_superuser = True
+        admin.is_approved = True
+        admin.is_active = True
+        admin.set_password('StrongPass123!')
+        admin.save()
+        self.stdout.write(
+            ('Created' if admin_created else 'Updated')
+            + ' admin user (email: admin@example.com, password: StrongPass123!)'
+        )
 
         # Create sample chargers
         host = User.objects.filter(role=User.ROLE_HOST).first()

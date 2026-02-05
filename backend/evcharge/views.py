@@ -20,15 +20,28 @@ def login_view(request):
         password = request.POST.get('password')
         # Using email as username
         user = authenticate(request, username=email, password=password)
-        if user is not None and user.is_active and user.is_approved:
-            login(request, user)
-            # Redirect based on role
-            if user.role == User.ROLE_HOST:
-                return redirect('host_dashboard')
-            if user.role == User.ROLE_ADMIN:
-                return redirect('admin_dashboard')
-            return redirect('driver_dashboard')
-        messages.error(request, 'Invalid credentials or account not approved')
+        if user is None:
+            messages.error(
+                request,
+                'Invalid email or password. If this is your first run, execute "python manage.py seed_data" to create demo accounts.',
+            )
+            return render(request, 'login.html')
+
+        if not user.is_active:
+            messages.error(request, 'Your account is inactive. Please contact support.')
+            return render(request, 'login.html')
+
+        if not user.is_approved:
+            messages.error(request, 'Your account is pending approval. Please wait for admin approval.')
+            return render(request, 'login.html')
+
+        login(request, user)
+        # Redirect based on role
+        if user.role == User.ROLE_HOST:
+            return redirect('host_dashboard')
+        if user.role == User.ROLE_ADMIN:
+            return redirect('admin_dashboard')
+        return redirect('driver_dashboard')
     return render(request, 'login.html')
 
 # Signup view: create user and log them in
