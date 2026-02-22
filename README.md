@@ -1,65 +1,139 @@
-EV Charger Sharing Platform - Django (SQLite)
+# ⚡ EV ChargeShare  
+A Community-Driven Platform for Smart Electric Vehicle Charging Access  
 
-This repository contains a full-stack Django application (development-ready) for an EV Charger Sharing Platform.
+## 📌 Overview
+EV ChargeShare is a decentralized, community-powered EV charging platform that allows private charger owners to share their chargers with nearby EV drivers.
 
-Quick start (Linux):
+The platform provides:
+- Map-based charger discovery
+- Real-time availability tracking
+- Secure authentication
+- Time-slot booking system
+- Atomic conflict resolution algorithm to prevent double booking
 
-1. Install system dependencies
+This system improves charger utilization, reduces waiting time, and promotes sustainable electric mobility.
 
-   sudo apt update
-   sudo apt install -y python3 python3-venv python3-pip git
+---
 
-2. Create project folder and clone this repo (if not already)
+## 🚀 Problem Statement
+Despite increasing EV adoption, users face:
 
-   git clone <repo_url>
-   cd <repo_folder>/backend
+- Limited public charging stations  
+- Long waiting times  
+- Uneven charger distribution  
+- Underutilized private chargers  
+- Double booking issues during peak demand  
 
-3. Create and activate virtualenv
+EV ChargeShare solves this using a decentralized sharing model with a robust booking algorithm.
 
-   python3 -m venv .venv
-   source .venv/bin/activate
+---
 
-4. Install Python dependencies
+## 🧠 Key Features
 
-   pip install -r requirements.txt
+- 🔐 Secure User Authentication (Host & Driver roles)
+- 🗺 Map-Based Charger Discovery (OpenStreetMap + Leaflet)
+- ⚡ Real-Time Charger Availability
+- 📅 Time-Based Slot Booking
+- 🛡 Booking Conflict Resolution (Atomic FCFS Algorithm)
+- 📈 Scalable 3-Tier Architecture
 
-5. Copy environment file and set keys
+---
 
-   cp ../.env.example .env
+## 🏗 System Architecture
 
-   # Edit .env and set SECRET_KEY, RAZORPAY keys, GOOGLE_MAPS_API_KEY
+### Three-Tier Architecture
 
-6. Create database migrations and migrate
+1. **Presentation Layer**
+   - React + Vite
+   - Tailwind CSS
+   - Map UI
 
-   python manage.py makemigrations
-   python manage.py migrate
+2. **Application Layer**
+   - Django Backend
+   - REST APIs
+   - Booking Logic
+   - Conflict Resolution
 
-7. Create a superuser for admin
+3. **Data Layer**
+   - SQLite (Development)
+   - PostgreSQL (Production)
 
-   python manage.py createsuperuser
+---
 
-8. Seed sample data (creates driver, host, admin, and sample chargers)
+## ⚙️ Booking Conflict Resolution Algorithm
 
-   python manage.py seed_data
+To prevent double booking:
 
-9. Run the development server
+- Each request is treated as a transaction
+- Slot is temporarily locked
+- Availability is verified
+- First valid request is confirmed
+- Others are rejected or rescheduled
+- Lock released after completion
 
-   python manage.py runserver 0.0.0.0:8000
+This ensures:
+- Fairness
+- Database consistency
+- No race conditions
+- High-traffic reliability
 
-Open http://127.0.0.1:8000 in your browser.
+---
 
-Notes:
+## 🛠 Technology Stack
 
-- Admin interface: http://127.0.0.1:8000/admin/ (use superuser credentials).
-- Razorpay: This project uses Razorpay test keys. Replace RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env with your test keys.
-- Google Maps: Replace GOOGLE_MAPS_API_KEY in .env to enable map features (currently placeholder).
-- Charger status cycling: Use the management command `python manage.py cycle_chargers` to update charger statuses. Set up a cron job to run it every 5 minutes in production.
+### Frontend
+- React
+- Vite
+- Tailwind CSS
+- Leaflet
 
-Common debugging tips:
+### Backend
+- Django
+- REST APIs
 
-- "ModuleNotFoundError": Ensure virtualenv activated and requirements installed.
-- "OperationalError: no such table": Did you run migrations? Run `python manage.py migrate`.
-- Templates not loading: Ensure TEMPLATES DIRS includes backend/templates and files exist.
-- Static files: In dev, Django serves static from STATICFILES_DIRS. Use collectstatic for production.
+### Database
+- SQLite
+- PostgreSQL
 
-If you want full PostgreSQL support, or to deploy to production (Gunicorn + Nginx), tell me and I'll add deployment instructions.
+### Tools
+- Git
+- GitHub
+- VS Code
+
+---
+
+## 🌍 External APIs Used
+
+- OpenStreetMap / Leaflet API
+- Browser Geolocation API
+
+---
+
+## 📊 Results
+
+- Eliminated double booking issues
+- Improved charger utilization
+- Reduced range anxiety
+- Scalable architecture ready for expansion
+
+---
+
+## 🔮 Future Enhancements
+
+- AI-based demand prediction
+- Dynamic pricing
+- Mobile application
+- Government EV integration
+
+---
+
+## 👨‍💻 Author
+
+**Krish Kumar**  
+BCA – Amity University, Ranchi  
+AIIT Department  
+
+---
+
+## 📜 License
+This project is for academic and research purposes.
