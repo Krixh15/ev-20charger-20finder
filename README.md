@@ -31,32 +31,11 @@ EV ChargeShare solves this using a decentralized sharing model with a robust boo
 ## 🧠 Key Features
 
 - 🔐 Secure User Authentication (Host & Driver roles)
-- 🗺 Map-Based Charger Discovery (OpenStreetMap + Leaflet)
+- 🗺 Map-Based Charger Discovery (OpenStreetMap + Google Maps API)
 - ⚡ Real-Time Charger Availability
 - 📅 Time-Based Slot Booking
 - 🛡 Booking Conflict Resolution (Atomic FCFS Algorithm)
 - 📈 Scalable 3-Tier Architecture
-
----
-
-## 🏗 System Architecture
-
-### Three-Tier Architecture
-
-1. **Presentation Layer**
-   - React + Vite
-   - Tailwind CSS
-   - Map UI
-
-2. **Application Layer**
-   - Django Backend
-   - REST APIs
-   - Booking Logic
-   - Conflict Resolution
-
-3. **Data Layer**
-   - SQLite (Development)
-   - PostgreSQL (Production)
 
 ---
 
@@ -81,40 +60,18 @@ This ensures:
 
 ## 🛠 Technology Stack
 
-### Frontend
-- React
-- Vite
+- HTML
 - Tailwind CSS
-- Leaflet
-
-### Backend
 - Django
 - REST APIs
+- MYSQL
 
-### Database
-- SQLite
-- PostgreSQL
-
-### Tools
-- Git
-- GitHub
-- VS Code
-
----
 
 ## 🌍 External APIs Used
 
-- OpenStreetMap / Leaflet API
+- OpenStreetMap / GOOGLE MAPS API
 - Browser Geolocation API
-
----
-
-## 📊 Results
-
-- Eliminated double booking issues
-- Improved charger utilization
-- Reduced range anxiety
-- Scalable architecture ready for expansion
+- Razorpay API (not implemented yet)
 
 ---
 
